@@ -1,0 +1,27 @@
+@CHARSET "ISO-8859-1";
+
+.chatholder{
+	width:100%;
+	height:100%;
+	position:Relative;
+	left:0%;
+	top:0%;
+	overflow-y:scroll;
+	font-size:125%;
+}
+chatsender{/*Styles the Sending box for Chat*/
+	width:90%;
+	height:8%;
+}
+input.MediumButton{
+	font-size:110%;
+	background-color:#30d0f0;
+	
+}
+select{
+	width:17.4%;
+}
+input.chatbox{
+	width:62%;
+	font-size:125%;
+}
