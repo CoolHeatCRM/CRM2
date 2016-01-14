@@ -14,16 +14,15 @@
  * $VID used to identify an Invoice
  * $CRID used to identify a Crew
  * $CIND used to identify a cusindex, these sort customer fields into their appropriate types for quick searching
- * 
- * 
+ * $TEID used to identify a Task Template
+ * $FID used to identify a Task Template Field from the fields table.
  */
 
 
 
 //Set up functions
 function Headprint(){
-	echo "
-	<html>
+	echo "<html>
 		<head>
 			<title>CRM 2</title>
 			<link rel='stylesheet' type='text/css' href='/Main.css'>
@@ -34,8 +33,7 @@ function Headprint(){
 	session_start();
 }
 function chatHeadprint(){
-	echo "
-	<html>
+	echo "<html>
 		<head>
 			<title>CRM 2</title>
 			<link rel='stylesheet' type='text/css' href='/chat.css'>
@@ -44,8 +42,7 @@ function chatHeadprint(){
 	session_start();
 }
 function NoSessionHeadprint(){
-	echo "
-	<html>
+	echo "<html>
 		<head>
 			<title>CRM 2</title>
 			<link rel='stylesheet' type='text/css' href='/Main.css'>
@@ -521,11 +518,35 @@ function searchCustomers($Term){
 	}
 	return $returns;
 }
-function createTask($CID){
+function createTask($CID,$TEID,$Agent,$Start){
 	$conn=conDB();
-	$sql="INSERT INTO task () VALUES ('','')";
+	
+	$sql="INSERT INTO tasks (AgentID,Start,Name,PowID) VALUES ('$Agent','$Start','')";
+	
+}
+function createTaskTemplate($Name,$Desc,$Fields,$Req,$TEID){
+	$conn=conDB();
+	$sql="INSERT INTO tasktemplates (Name,Description) VALUES ('$Name','$Desc')";
+	createTaskTemplateFields($Fields,$Req,$TEID);
+	mysqli_query($conn, $sql);
+}
+function createTaskTemplateFields($IndexID,$Required,$TEID){
+	$conn=conDB();
+	$sql="INSERT INTO fields (CusIndexID,Required,TemplateID) VALUES ";
+	$Indexes=count($IndexID);
+	for($x=0;$x<$Indexes;$x++){
+		$dex=$IndexID[$x];
+		$req=$Required[$x];
+		$TE=$TEID[$x];
+		$sql="$sql ('$dex','$req','$TE')";
+		if($x+1!=$Indexes){
+			$sql="$sql ,";
+		}
+	}
+	mysqli_query($conn, $sql);
 }
 //Sub Functions, These are generaly not called directly
+
 function calculatePrice($ITD,$Price,$newStock){
 	$CPrice=getItemPrice($ITD);
 	$Cstock=getStockALL($ITD);
@@ -1051,5 +1072,52 @@ function getTodaysTask($AID,$Date){
 		$x++;
 	}
 	return $return;
+}
+function getTemplateName($TEID){
+	$conn=conDB();
+	$sql="SELECT Name FROM tasktemplates WHERE IDKey='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	return $row["Name"];
+}
+function getTemplateDescription($TEID){
+	$conn=conDB();
+	$sql="SELECT Description FROM tasktemplates WHERE IDKey='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	return $row["Description"];
+}
+function getTemplateFields($TEID){
+	$conn=conDB();
+	$returns=array();
+	$x=0;
+	$sql="SELECT IDKey FROM fields WHERE TemplateID='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$returns[$x]=$row["IDKey"];
+		$x++;
+	}
+	return $returns;
+}
+function getfieldCIND($FID){
+	$conn=conDB();
+	$sql="SELECT CusIndexID FROM fields WHERE IDKey='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	return $row["CusIndexID"];
+}
+function getfieldReq($FID){
+	$conn=conDB();
+	$sql="SELECT Required FROM fields WHERE IDKey='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	return $row["Required"];
+}
+function getfieldTEID($FID){
+	$conn=conDB();
+	$sql="SELECT TemplateID FROM fields WHERE IDKey='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	return $row["TemplateID"];
 }
 ?>
