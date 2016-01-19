@@ -20,7 +20,7 @@ $FavoritesN=count($Favorites);
 for($x=0;$x<$FavoritesN;$x++){
 	echo "<option value='$Favorites[$x]'>";
 	$x++;
-	echo "$Favorites[$x1]</option>";
+	echo "$Favorites[$x]</option>";
 }
 echo"</select>
 		<input type='text' name='msg' class='chatbox'>
