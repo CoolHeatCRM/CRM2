@@ -14,7 +14,9 @@ if ($mode=="ViewTask"){
 else if ($mode=="ViewTasklist"){
 }
 else if ($mode=="NextTasks"){
-
+	
+	$TID=getNextTask($AID);
+	printSmartTaskUI($TID,$AID);
 }else if ($mode=="CreateTasks"){
 
 }

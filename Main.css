@@ -14,10 +14,10 @@ body {
 	height:100%;
 }
 .MenuButtons{
-		position:Absolute;
-		left:2%;
-		top:1%;
-		width:95%;
+	position:Absolute;
+	left:2%;
+	top:1%;
+	width:95%;
 }
 .MainTable{
 	background-color:transparent;

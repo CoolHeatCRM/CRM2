@@ -648,6 +648,15 @@ function getCurrentTasks($AID){
 	}
 	return $returns;
 }
+//Returns the ID for an agents next incomplate, assigned Task, by chronological order assigned
+function getNextTask($AID){
+	$conn=conDB();
+	$returns=array();
+	$sql="SELECT * FROM tasks WHERE AgentID='$AID' AND Complete='0'";
+	$result = mysqli_query($conn, $sql);
+	$row = $result->fetch_assoc();
+	return$row["IDKey"];
+}
 //Finds all FieldID's related to a Task ID and returns an array
 function getTaskFields($TID){
 	$conn=conDB();
@@ -715,6 +724,7 @@ function getTasks($AID){
 	return $returns;
 	
 }
+//Returnst he current stock of an item at a certain location
 function getStock($ITD,$LID){
 	$conn=conDB();
 	$sql="SELECT * FROM stock WHERE ItemID='$ITD' AND LocID='$LID'";
@@ -843,6 +853,7 @@ function getDateStamp(){
 	$date=str_replace('/', '-', $date);
 	return $date;
 }
+//Modifies the current Date relative to a given date, and returns the day of the result
 function getRelativeDate($days){
 	$date=date('Y-m-d');
 	$datetime=new DateTime($date);
@@ -856,14 +867,17 @@ function getRelativeDate($days){
 	$FDate=$datetime->format('Y-m-d');
 	return $FDate;
 }
+//Gets the current Date
 function getToday(){
 	$date=date('D');
 	return $date;
 }
+//Gets the current day of the week
 function getTodayinWeek(){
 	$date=date('w');
 	return $date;
 }
+//Gets the current day of the month
 function getTodayinMonth(){
 	$date=date('j');
 	return $date;
@@ -1005,6 +1019,7 @@ function getCusFieldT($CFID,$CID,$TID){
 	}
 	return $returns;
 }
+//Returns an array with the current Chat log inside of it.
 function getChatLog($AID){
 	$conn=conDB();
 	$sql="SELECT agents.Fname,chat.Message,chat.TimeStamp FROM chat INNER JOIN agents ON chat.AgentID=agents.IDKey WHERE chat.Global='1' OR chat.TargetAID='$AID' OR chat.AgentID='$AID' ORDER BY chat.IDKey DESC LIMIT 100";
@@ -1021,6 +1036,7 @@ function getChatLog($AID){
 	}
 	return $return;
 }
+//Returns  timestamp for the current time
 function getTimeStamp(){
 	$date= date("H:i:s");
 	return $date;
@@ -1050,6 +1066,7 @@ function getChatFavorites($AID){
 	}
 	return $return;
 }
+//Returns a list of all tasks for a day given
 function getTodaysTask($AID,$Date){
 	$conn=conDB();
 	$sql="SELECT * FROM tasks WHERE AgentID='$AID' AND Start='$Date' AND Stacking='0'";
@@ -1073,6 +1090,7 @@ function getTodaysTask($AID,$Date){
 	}
 	return $return;
 }
+//Returns the name of a given Task Tempalte
 function getTemplateName($TEID){
 	$conn=conDB();
 	$sql="SELECT Name FROM tasktemplates WHERE IDKey='$TEID'";
@@ -1080,6 +1098,7 @@ function getTemplateName($TEID){
 	$row= $result->fetch_assoc();
 	return $row["Name"];
 }
+//Returns the Description of  agiven task tempalte
 function getTemplateDescription($TEID){
 	$conn=conDB();
 	$sql="SELECT Description FROM tasktemplates WHERE IDKey='$TEID'";
@@ -1087,6 +1106,7 @@ function getTemplateDescription($TEID){
 	$row= $result->fetch_assoc();
 	return $row["Description"];
 }
+//returns the Fields related to a certain task template
 function getTemplateFields($TEID){
 	$conn=conDB();
 	$returns=array();
@@ -1099,6 +1119,7 @@ function getTemplateFields($TEID){
 	}
 	return $returns;
 }
+//Returns the Customer ID of a Field
 function getfieldCIND($FID){
 	$conn=conDB();
 	$sql="SELECT CusIndexID FROM fields WHERE IDKey='$TEID'";
@@ -1106,6 +1127,7 @@ function getfieldCIND($FID){
 	$row= $result->fetch_assoc();
 	return $row["CusIndexID"];
 }
+//Returns the Requirements to View/Edit a field
 function getfieldReq($FID){
 	$conn=conDB();
 	$sql="SELECT Required FROM fields WHERE IDKey='$TEID'";
@@ -1113,6 +1135,7 @@ function getfieldReq($FID){
 	$row= $result->fetch_assoc();
 	return $row["Required"];
 }
+//Returns the Template that a field is associated with
 function getfieldTEID($FID){
 	$conn=conDB();
 	$sql="SELECT TemplateID FROM fields WHERE IDKey='$TEID'";
