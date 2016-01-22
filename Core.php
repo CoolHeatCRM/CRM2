@@ -1056,14 +1056,19 @@ function getChatFavorites($AID){
 	$result = mysqli_query($conn, $sql);
 	$return=array();
 	$x=0;
-	while($row= $result->fetch_assoc()){
-		$TID=$row["TargetID"];
-		$AName=$row["Fname"];
-		$return[$x]=$TID;
-		$x++;
-		$return[$x]=$AName;
-		$x++;
+	if (mysqli_num_rows($result) ==1) {
+		while($row= $result->fetch_assoc()){
+			$TID=$row["TargetID"];
+			$AName=$row["Fname"];
+			$return[$x]=$TID;
+			$x++;
+			$return[$x]=$AName;
+			$x++;
+		}
+		return $return;
 	}
+	$return[0]=FALSE;
+	$return[1]=FALSE;
 	return $return;
 }
 //Returns a list of all tasks for a day given

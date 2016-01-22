@@ -17,12 +17,15 @@ echo "<form action='chatSend.php' method='post'>
 			<option value='0'>All</option>";
 $Favorites=getChatFavorites($AID);
 $FavoritesN=count($Favorites);
-for($x=0;$x<$FavoritesN;$x++){
-	echo "<option value='$Favorites[$x]'>";
-	$x++;
-	echo "$Favorites[$x]</option>";
+if($FavoritesN>0){
+	for($x=0;$x<$FavoritesN;$x++){
+		echo "<option value='$Favorites[$x]'>";
+		$x++;
+		echo "$Favorites[$x]</option>";
+	}
 }
-echo"</select>
+
+echo "</select>
 		<input type='text' name='msg' class='chatbox'>
 		<input type='submit' value='Send' class='MediumButton'>
 		</form>";
