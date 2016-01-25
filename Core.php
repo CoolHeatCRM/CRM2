@@ -265,7 +265,7 @@ function printTemplateMaker(){
 	echo "<div>";
 		echo "<input type='text' name='Desc' >";
 	echo"</div>";
-	echo "<table class='CalendarTable'>";
+	echo "<table class='TemplateTable'>";
 	echo "<tr>";
 	echo "<td title='Whether to Require this Field'>Req</td><td title='Whether to Add this Field to the Template'>Use</td><td>Field</td>";
 	echo "</tr>";
