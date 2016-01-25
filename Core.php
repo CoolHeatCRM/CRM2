@@ -145,7 +145,7 @@ function printUI($AID,$mode,$TID,$MINI){
 		}else if ($mode=="Search"){
 			printlistofCustomers($TID);
 		}else if ($mode=="CreateTemplate"){
-			printTemplateMaker($AID);
+			printTemplateMaker($AID,$MINI);
 		}
 			
 		echo "</div>";//Closes MenuButtons
@@ -260,12 +260,17 @@ function printCalendar($AID){
 function printTemplateMaker(){
 	echo "<form action='action.php' method='post'>";
 	echo "<div>";
-		echo "<input type='text' name='Name' value=''>";
+		echo "<input type='text' name='Name' placeholder='Name'>";
 	echo"</div>";
 	echo "<div>";
-		echo "<input type='text' name='Desc' >";
+		echo "<input type='text' name='Desc' placeholder='Description'>";
 	echo"</div>";
-	echo "<table class='TemplateTable'>";
+	if($MINI=="1"){
+		echo "<table class='TemplateTableS'>";
+	}else{
+		echo "<table class='TemplateTable'>";
+	}
+	
 	echo "<tr>";
 	echo "<td title='Whether to Require this Field'>Req</td><td title='Whether to Add this Field to the Template'>Use</td><td>Field</td>";
 	echo "</tr>";

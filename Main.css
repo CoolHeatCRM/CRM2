@@ -41,7 +41,23 @@ body {
 	top:63%;
 	height:35%;
 	width:95%;
+}/*General Table information begins here*/
+table.TemplateTable{
+	width:60%;
+	height:100%;
+	border-style: outset;
+	border-width: 1%;
+	border-color:#30d0f0;
 }
+table.TemplateTableS{
+	width:75%;
+	height:100%;
+	border-style: outset;
+	border-width: 1%;
+	border-color:#30d0f0;
+}
+/*General Table information ends here*/
+/*Calendar Section starts here*/
 table.CalendarTable{
 	width:100%;
 	height:100%;
