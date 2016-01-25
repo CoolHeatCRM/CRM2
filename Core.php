@@ -257,7 +257,7 @@ function printCalendar($AID){
 		echo "</tr>";
 	echo "</table>";
 }
-function printTemplateMaker(){
+function printTemplateMaker($Aid,$MINI){
 	echo "<form action='action.php' method='post'>";
 	echo "<div>";
 		echo "<input type='text' name='Name' placeholder='Name'>";
@@ -270,7 +270,6 @@ function printTemplateMaker(){
 	}else{
 		echo "<table class='TemplateTable'>";
 	}
-	
 	echo "<tr>";
 	echo "<td title='Whether to Require this Field'>Req</td><td title='Whether to Add this Field to the Template'>Use</td><td>Field</td>";
 	echo "</tr>";
@@ -286,6 +285,7 @@ function printTemplateMaker(){
 			</tr>";
 	}
 	echo"</table>";
+	echo "<input type='submit' value='Create'></form>";
 }
 //Inventory Functions
 //Creates a new Item Template
