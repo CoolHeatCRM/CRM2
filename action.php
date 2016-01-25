@@ -18,7 +18,10 @@ else if ($mode=="NextTasks"){
 	$TID=getNextTask($AID);
 	printSmartTaskUI($TID,$AID);
 }else if ($mode=="CreateTasks"){
-
+	
+}
+else if($mode=="CreateTemplate"){
+	
 }
 else if ($mode=="AssignTasks"){
 	$TIDS=$_POST["TIDS"];

@@ -144,6 +144,8 @@ function printUI($AID,$mode,$TID,$MINI){
 			printListofTasks($AID);
 		}else if ($mode=="Search"){
 			printlistofCustomers($TID);
+		}else if ($mode=="CreateTemplate"){
+			printTemplateMaker($AID);
 		}
 			
 		echo "</div>";//Closes MenuButtons
@@ -200,6 +202,7 @@ function printTasksButtons(){
 			</tr>
 			<tr>
 				<td><form action='action.php' method='post'><input type='submit' value='Create Task' class='BigButton'><input type='text' name='mode' value='CreateTasks' hidden></form></td>
+				<td><form action='action.php' method='post'><input type='submit' value='Create Template' class='BigButton'><input type='text' name='mode' value='CreateTemplate' hidden></form></td>
 			</tr>
 			<tr>
 				<td><form action='action.php' method='post'><input type='submit' value='Search' class='BigButton'><input type='text' name='mode' value='Search' hidden></form></td>
@@ -253,6 +256,31 @@ function printCalendar($AID){
 		}
 		echo "</tr>";
 	echo "</table>";
+}
+function printTemplateMaker(){
+	echo "<form action='action.php' method='post'>";
+	echo "<div>";
+		echo "<input type='text' name='Name' value=''>";
+	echo"</div>";
+	echo "<div>";
+		echo "<input type='text' name='Desc' >";
+	echo"</div>";
+	echo "<table class='CalendarTable'>";
+	echo "<tr>";
+	echo "<td title='Whether to Require this Field'>Req</td><td title='Whether to Add this Field to the Template'>Use</td><td>Field</td>";
+	echo "</tr>";
+	$fields=getFieldIndex();
+	$fieldsN=count($fields);
+	for($v=0;$v<$fieldsN;$v++){
+		$ID=$fields[$v];
+		$v++;
+		$Name=$fields[$v];
+		echo "<tr><td title='Whether to Require this Field'><input type='checkbox' name='Req[]' value='$ID'></td>
+				<td title='Whether to Add this Field to the Template'><input type='checkbox' name='Use[]' value='$ID'></td>
+				<td>$Name</td>
+			</tr>";
+	}
+	echo"</table>";
 }
 //Inventory Functions
 //Creates a new Item Template
@@ -1159,5 +1187,19 @@ function getfieldTEID($FID){
 //Returns an array of Cusfields that contain a given String
 function searchCFields(){
 	
+}
+function getFieldIndex(){
+	$conn=conDB();
+	$sql="SELECT * FROM cusindex";
+	$returns=array();
+	$x=0;
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$returns[$x]=$row["IDKey"];
+		$x++;
+		$returns[$x]=$row["Name"];
+		$x++;
+	}
+	return $returns;
 }
 ?>
