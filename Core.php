@@ -64,6 +64,13 @@ function TailPrint(){
 			<form action='action.php' method='post'><input type='submit' value='C' class='MediumButton'>
 			<input type='text' name='mode' value='DISPLAY' hidden></form>
 			</div>";
+	echo "<div class='Search'>
+			<form action='action.php' method='post'>
+			<input type='text' name='Terms'>
+			<input type='submit' value='S' class='MediumButton'>
+			<input type='text' name='mode' value='DISPLAY' hidden></form>
+			</div>
+			";
 	echo "</body></html>";
 }
 function conDB(){
