@@ -200,7 +200,6 @@ function printTasksButtons(){
 			</tr>
 			<tr>
 				<td><form action='action.php' method='post'><input type='submit' value='Create Task' class='BigButton'><input type='text' name='mode' value='CreateTasks' hidden></form></td>
-				<td><form action='action.php' method='post'><input type='submit' value='Assign Task' class='BigButton'><input type='text' name='mode' value='AssignTasks' hidden></form></td>
 			</tr>
 			<tr>
 				<td><form action='action.php' method='post'><input type='submit' value='Search' class='BigButton'><input type='text' name='mode' value='Search' hidden></form></td>
@@ -495,6 +494,47 @@ function assignTasks($AID,$TIDS){
 		assignTask($AID,$TIDS[$x]);
 	}
 }
+//Creates a Task form a given Template and Assigns it to an Agent starting on the Given Start Date, and Requiring a Power
+function createTask($CID,$TEID,$Agent,$Start,$Name,$PowID){
+	$conn=conDB();
+	$PowID=getTemplatePow($TEID);
+	$sql="INSERT INTO tasks (AgentID,Start,Name,PowID) VALUES ('$Agent','$Start','$Name','$PowID')";
+	mysqli_query($conn, $sql);
+}
+//Takes in a Name, Description Power IDKey and Arrays of Fields, then creates the appropriate Template according to the Given Information
+function createTaskTemplate($Name,$Desc,$Fields,$Req,$TEID,$PowID){
+	$conn=conDB();
+	$sql="INSERT INTO tasktemplates (Name,Description,PowID) VALUES ('$Name','$Desc','$PowID')";
+	createTaskTemplateFields($Fields,$Req,$TEID);
+	mysqli_query($conn, $sql);
+}
+
+
+//Sub Functions, These are generaly not called directly
+
+function calculatePrice($ITD,$Price,$newStock){
+	$CPrice=getItemPrice($ITD);
+	$Cstock=getStockALL($ITD);
+	$StockTotal=$Cstock+$newStock;
+	$total=$CPrice*$Cstock+$Price*$newStock;
+	$final=$total/$StockTotal;
+	return $final;
+}
+function createTaskTemplateFields($IndexID,$Required,$TEID){
+	$conn=conDB();
+	$sql="INSERT INTO fields (CusIndexID,Required,TemplateID) VALUES ";
+	$Indexes=count($IndexID);
+	for($x=0;$x<$Indexes;$x++){
+		$dex=$IndexID[$x];
+		$req=$Required[$x];
+		$TE=$TEID[$x];
+		$sql="$sql ('$dex','$req','$TE')";
+		if($x+1!=$Indexes){
+			$sql="$sql ,";
+		}
+	}
+	mysqli_query($conn, $sql);
+}
 function searchCustomers($Term){
 	$conn=conDB();
 	$pieces=explode(" ",$Term);
@@ -518,44 +558,6 @@ function searchCustomers($Term){
 	}
 	return $returns;
 }
-function createTask($CID,$TEID,$Agent,$Start){
-	$conn=conDB();
-	
-	$sql="INSERT INTO tasks (AgentID,Start,Name,PowID) VALUES ('$Agent','$Start','')";
-	
-}
-function createTaskTemplate($Name,$Desc,$Fields,$Req,$TEID){
-	$conn=conDB();
-	$sql="INSERT INTO tasktemplates (Name,Description) VALUES ('$Name','$Desc')";
-	createTaskTemplateFields($Fields,$Req,$TEID);
-	mysqli_query($conn, $sql);
-}
-function createTaskTemplateFields($IndexID,$Required,$TEID){
-	$conn=conDB();
-	$sql="INSERT INTO fields (CusIndexID,Required,TemplateID) VALUES ";
-	$Indexes=count($IndexID);
-	for($x=0;$x<$Indexes;$x++){
-		$dex=$IndexID[$x];
-		$req=$Required[$x];
-		$TE=$TEID[$x];
-		$sql="$sql ('$dex','$req','$TE')";
-		if($x+1!=$Indexes){
-			$sql="$sql ,";
-		}
-	}
-	mysqli_query($conn, $sql);
-}
-//Sub Functions, These are generaly not called directly
-
-function calculatePrice($ITD,$Price,$newStock){
-	$CPrice=getItemPrice($ITD);
-	$Cstock=getStockALL($ITD);
-	$StockTotal=$Cstock+$newStock;
-	$total=$CPrice*$Cstock+$Price*$newStock;
-	$final=$total/$StockTotal;
-	return $final;
-}
-
 
 //Get Functions
 //Takes in an agentID and returns an Array of Permissions granted
@@ -1103,7 +1105,7 @@ function getTemplateName($TEID){
 	$row= $result->fetch_assoc();
 	return $row["Name"];
 }
-//Returns the Description of  agiven task tempalte
+//Returns the Description of  a given task template
 function getTemplateDescription($TEID){
 	$conn=conDB();
 	$sql="SELECT Description FROM tasktemplates WHERE IDKey='$TEID'";
@@ -1125,6 +1127,12 @@ function getTemplateFields($TEID){
 	return $returns;
 }
 //Returns the Customer ID of a Field
+function getTemplatePow($TEID){
+	$conn=conDB();
+	$sql="SELECT PowID FROM tasktemplates WHERE IDKey='$TEID'";
+	$result = mysqli_query($conn, $sql);
+	return $row["PowID"];
+}
 function getfieldCIND($FID){
 	$conn=conDB();
 	$sql="SELECT CusIndexID FROM fields WHERE IDKey='$TEID'";
@@ -1147,5 +1155,9 @@ function getfieldTEID($FID){
 	$result = mysqli_query($conn, $sql);
 	$row= $result->fetch_assoc();
 	return $row["TemplateID"];
+}
+//Returns an array of Cusfields that contain a given String
+function searchCFields(){
+	
 }
 ?>
