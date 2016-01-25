@@ -115,24 +115,24 @@ minichat{/*Creates a mini Bounding box for the chat*/
 /*Below here is buttons and Input styling*/
 .logout{
 	position:Absolute;
-	left:90%;
+	left:86%;
 	top:0%;
 }
 .Mini{
 	position:Absolute;
-	left:87%;
+	left:83%;
 	top:0%;
 	z-index: 1;
 }
 .Close{
 	position:Absolute;
-	left:84%;
+	left:80%;
 	top:0%;
 	z-index: 1;
 }
 .Search{
 	position:Absolute;
-	left:93%;
+	left:89%;
 	top:0%;
 	z-index: 1;
 }
