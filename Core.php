@@ -61,7 +61,7 @@ function TailPrint(){
 			<input type='text' name='mode' value='MINI' hidden></form></div>
 			";
 	echo "<div class='Close'>
-			<form action='action.php' method='post'><input type='submit' value='C'>
+			<form action='action.php' method='post'><input type='submit' value='C' class='MediumButton'>
 			<input type='text' name='mode' value='DISPLAY' hidden></form>
 			</div>";
 	echo "<div class='Search'>
