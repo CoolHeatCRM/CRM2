@@ -23,7 +23,6 @@ body {
 	background-color:transparent;
 	font-size:200%;
 }
-
 /*Calendar Section begins HERE*/
 .Buffer{
 	height:10%;
@@ -42,7 +41,6 @@ body {
 	height:35%;
 	width:95%;
 }
-
 /*General Table information begins here*/
 table.TemplateTable{
 	width:60%;
@@ -52,8 +50,8 @@ table.TemplateTable{
 	border-color:#30d0f0;
 }
 table.TemplateTableS{
-	width:100%;
-	height:100%;
+	width:75%;
+	height:120%;
 	border-style: outset;
 	border-width: 1%;
 	border-color:#30d0f0;
@@ -154,4 +152,7 @@ input.MediumButton{
 input.MINIButton{
 	font-size:110%;
 	background-color:#30d0f0;
+}
+input.TailSearchBar{
+	width:10px;
 }

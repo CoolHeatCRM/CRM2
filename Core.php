@@ -61,12 +61,12 @@ function TailPrint(){
 			<input type='text' name='mode' value='MINI' hidden></form></div>
 			";
 	echo "<div class='Close'>
-			<form action='action.php' method='post'><input type='submit' value='C' class='MediumButton'>
+			<form action='action.php' method='post'><input type='submit' value='C'>
 			<input type='text' name='mode' value='DISPLAY' hidden></form>
 			</div>";
 	echo "<div class='Search'>
 			<form action='action.php' method='post'>
-			<input type='text' name='Terms'>
+			<input type='text' name='Terms' class='TailSearchBar'>
 			<input type='submit' value='S' class='MediumButton'>
 			<input type='text' name='mode' value='DISPLAY' hidden></form>
 			</div>
@@ -136,7 +136,7 @@ function printlistofCustomers($Terms){
 		$CusID=$array[$x];
 		$sql="SELECT * FROM cusfields WHERE CusID='$array[$x]'";
 		echo "<div class='SearchResults'>";
-		
+			
 		echo "</div>";
 	}
 }
@@ -267,7 +267,7 @@ function printCalendar($AID){
 function printTemplateMaker($Aid,$MINI){
 	echo "<form action='action.php' method='post'>";
 	echo "<div>";
-		echo "<input type='text' name='Name' placeholder='Name'>";
+		echo "<input type='text' name='Name' placeholder='Name'><input type='submit' value='Create'>";
 	echo"</div>";
 	echo "<div>";
 		echo "<input type='text' name='Desc' placeholder='Description'>";
@@ -329,7 +329,6 @@ function setUnit($ITD,$Unit){
 	$sql="UPDATE items SET UnitID='$Unit' WHERE IDKey='$ITD'";
 	mysqli_query($conn, $sql);
 }
-
 //Takes in an Item ID, a Location ID and a quantity and will add stock to the appropriate Stock Pile or Create a new one if it's not found.
 function AddtoStock($ITD,$quantity,$LID,$Price){
 	$conn=conDB();
@@ -439,7 +438,6 @@ function AddtoChat($AID,$MSG,$GLO,$TAID){
 	$sql="INSERT INTO chat (AgentID,Message,TimeStamp,Global,TargetAID) VALUES ('$AID','$MSG','$date','$GLO','$TAID')";
 	mysqli_query($conn, $sql);
 }
-
 
 //Admin Functions
 function createPKEY($POWID,$PID){
