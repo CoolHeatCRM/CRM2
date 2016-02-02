@@ -112,7 +112,7 @@ function printSmartTaskUI($TID,$AID){
 			echo "<input type='text' value='PERMERROR' name='fields[]'>Unknown";
 		}
 	}
-	echo "<input type='submit' value='Submit'><input type='text' value='SubmitTask' name='mode' hidden></form>";
+	echo "<input type='text' value='SubmitTask' name='mode' hidden><input type='submit' value='Submit'></form>";
 }
 function printListofTasks($AID){
 	$tasks=getTasks($AID);
@@ -291,8 +291,8 @@ function printTemplateMaker($Aid,$MINI){
 				<td>$Name</td>
 			</tr>";
 	}
-	echo"</table>";
-	echo "<input type='submit' value='Create'></form>";
+	echo"</table>
+	</form>";
 }
 //Inventory Functions
 //Creates a new Item Template
