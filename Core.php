@@ -129,9 +129,11 @@ function printListofTasks($AID){
 	echo "<button type='submit' name='mode' value='assign' class='MediumButton'>Assign Tasks</button>";
 	echo "</form>";
 }
-function printlistofCustomers($Terms){
+function printlistofCustomers($Terms,$AID){
 	$array=searchCustomers($Terms);
 	$arrayN=count($array);
+	$Viewable=getPermittedIndexV($AID);
+	$Editable=getPermittedIndexE($AID);
 	for($x=0;$x<$arrayN;$x++){
 		$CusID=$array[$x];
 		$sql="SELECT * FROM cusfields WHERE CusID='$array[$x]'";
@@ -150,7 +152,7 @@ function printUI($AID,$mode,$TID,$MINI){
 		}else if ($mode=="ViewTasklist"){
 			printListofTasks($AID);
 		}else if ($mode=="Search"){
-			printlistofCustomers($TID);
+			printlistofCustomers($TID,$AID);
 		}else if ($mode=="CreateTemplate"){
 			printTemplateMaker($AID,$MINI);
 		}
@@ -212,7 +214,6 @@ function printTasksButtons(){
 				<td><form action='action.php' method='post'><input type='submit' value='Create Template' class='BigButton'><input type='text' name='mode' value='CreateTemplate' hidden></form></td>
 			</tr>
 			<tr>
-				<td><form action='action.php' method='post'><input type='submit' value='Search' class='BigButton'><input type='text' name='mode' value='Search' hidden></form></td>
 				<td><form action='action.php' method='post'><input type='submit' value='Account/Stats' class='BigButton'><input type='text' name='mode' value='Account' hidden></form></td>
 			</tr>
 			</table>
@@ -266,8 +267,10 @@ function printCalendar($AID){
 }
 function printTemplateMaker($Aid,$MINI){
 	echo "<form action='action.php' method='post'>";
-	echo "<div>";
-		echo "<input type='text' name='Name' placeholder='Name'><input type='submit' value='Create'>";
+	echo "
+			<input type='text' value='CreateTemplate' name='mode' hidden>
+			<div>";
+		echo "<input type='text' name='Name' placeholder='Name'><input type='submit' value='Create' class='MediumButton'>";
 	echo"</div>";
 	echo "<div>";
 		echo "<input type='text' name='Desc' placeholder='Description'>";
@@ -618,9 +621,9 @@ function checkPermission($AID,$PID){
 	$sql="SELECT * FROM agentpermissions WHERE AgentID='$AID' AND PermissionGranted='$PID'";
 	$result = mysqli_query($conn, $sql);
 	if (mysqli_num_rows($result) !=0) {
-		return "TRUE";
+		return TRUE;
 	}
-	return "FALSE";
+	return FALSE;
 }
 //Takes in an Interface IDKey and returns an Array of Interface lines
 function getInterface($IID){
@@ -1209,6 +1212,41 @@ function getFieldIndex(){
 		$x++;
 		$returns[$x]=$row["Name"];
 		$x++;
+	}
+	return $returns;
+}
+
+function getPermittedIndexV($AID){
+	$conn=conDB();
+	$sql="SELECT PermIDV,Name,IDKey FROM cusindex";
+	$returns=array();
+	$x=0;
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$IDKey=$row["PermIDV"];
+		if(checkPermission($AID,$IDKey)){
+			$returns[$x]=$row["IDKey"];
+			$x++;
+			$returns[$x]=$row["Name"];
+			$x++;
+		}
+	}
+	return $returns;
+}
+function getPermittedIndexE($AID){
+	$conn=conDB();
+	$sql="SELECT PermIDE,Name,IDKey FROM cusindex";
+	$returns=array();
+	$x=0;
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$IDKey=$row["PermIDE"];
+		if(checkPermission($AID,$IDKey)){
+			$returns[$x]=$row["IDKey"];
+			$x++;
+			$returns[$x]=$row["Name"];
+			$x++;
+		}
 	}
 	return $returns;
 }
