@@ -18,6 +18,9 @@ else if ($mode=="NextTasks"){
 	$TID=getNextTask($AID);
 	printSmartTaskUI($TID,$AID);
 }else if ($mode=="CreateTasks"){
+	
+}
+else if($mode=="CreateTemplate"){
 	$create=$_POST["create"];
 	if($create==1){
 		$Req=$_POST["Req[]"];
@@ -25,12 +28,9 @@ else if ($mode=="NextTasks"){
 		$Name=$_POST["Name"];
 		$Desc=$_POST["Desc"];
 		$Perm=$_POST["Perm"];
-		
 		createTaskTemplate($Name,$Desc,$Fields,$Req,$Perm);
+		echo"<div class='confirmation'>A Template named $Name<br>Has been created successfully!</div>";
 	}
-}
-else if($mode=="CreateTemplate"){
-	
 }
 else if ($mode=="AssignTasks"){
 	$TIDS=$_POST["TIDS"];
