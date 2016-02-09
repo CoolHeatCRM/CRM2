@@ -281,6 +281,7 @@ function printTemplateMaker($Aid,$MINI){
 			$x2=$x+1;
 			echo "<option value='$perms[$x]'>$perms[$x2]</option>";
 		}
+		echo"</select>";
 	echo"</div>";
 	if($MINI=="1"){
 		echo "<table class='TemplateTableS'>";
