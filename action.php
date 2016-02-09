@@ -18,7 +18,16 @@ else if ($mode=="NextTasks"){
 	$TID=getNextTask($AID);
 	printSmartTaskUI($TID,$AID);
 }else if ($mode=="CreateTasks"){
-	
+	$create=$_POST["create"];
+	if($create==1){
+		$Req=$_POST["Req[]"];
+		$Fields=$_POST["Use[]"];
+		$Name=$_POST["Name"];
+		$Desc=$_POST["Desc"];
+		$Perm=$_POST["Perm"];
+		
+		createTaskTemplate($Name,$Desc,$Fields,$Req,$Perm);
+	}
 }
 else if($mode=="CreateTemplate"){
 	

@@ -156,7 +156,6 @@ function printUI($AID,$mode,$TID,$MINI){
 		}else if ($mode=="CreateTemplate"){
 			printTemplateMaker($AID,$MINI);
 		}
-			
 		echo "</div>";//Closes MenuButtons
 		if($MINI=="X"){
 			echo "<div class='Invis'>";
@@ -211,13 +210,13 @@ function printTasksButtons(){
 			</tr>
 			<tr>
 				<td><form action='action.php' method='post'><input type='submit' value='Create Task' class='BigButton'><input type='text' name='mode' value='CreateTasks' hidden></form></td>
-				<td><form action='action.php' method='post'><input type='submit' value='Create Template' class='BigButton'><input type='text' name='mode' value='CreateTemplate' hidden></form></td>
+				<td><form action='action.php' method='post'><input type='submit' value='Create Template' class='BigButton'><input type='text' name='mode' value='CreateTemplate' hidden><input type='text' value='0' name='create' hidden></form></td>
 			</tr>
 			<tr>
 				<td><form action='action.php' method='post'><input type='submit' value='Account/Stats' class='BigButton'><input type='text' name='mode' value='Account' hidden></form></td>
 			</tr>
-			</table>
-			";
+		</table>
+		";
 }
 function printCalendar($AID){
 	echo "<table class='CalendarTable'>";
@@ -266,14 +265,22 @@ function printCalendar($AID){
 	echo "</table>";
 }
 function printTemplateMaker($Aid,$MINI){
+	$Perms=getListOfPermissions();
+	$permsN=count($Perms);
 	echo "<form action='action.php' method='post'>";
 	echo "
 			<input type='text' value='CreateTemplate' name='mode' hidden>
+			<input type='text' value='1' name='create' hidden>
 			<div>";
 		echo "<input type='text' name='Name' placeholder='Name'><input type='submit' value='Create' class='MediumButton'>";
 	echo"</div>";
 	echo "<div>";
 		echo "<input type='text' name='Desc' placeholder='Description'>";
+		echo "<select name='Perm'>";
+		for($x=0;$x<$permsN;$x=$x+2){
+			$x2=$x+1;
+			echo "<option value='$perms[$x]'>$perms[$x2]</option>";
+		}
 	echo"</div>";
 	if($MINI=="1"){
 		echo "<table class='TemplateTableS'>";
@@ -543,11 +550,13 @@ function createTask($CID,$TEID,$Agent,$Start,$Name,$PowID){
 	mysqli_query($conn, $sql);
 }
 //Takes in a Name, Description Power IDKey and Arrays of Fields, then creates the appropriate Template according to the Given Information
-function createTaskTemplate($Name,$Desc,$Fields,$Req,$TEID,$PowID){
+function createTaskTemplate($Name,$Desc,$Fields,$Req,$PowID){
 	$conn=conDB();
 	$sql="INSERT INTO tasktemplates (Name,Description,PowID) VALUES ('$Name','$Desc','$PowID')";
-	createTaskTemplateFields($Fields,$Req,$TEID);
 	mysqli_query($conn, $sql);
+	$TEID=getTemplateByNameDesc($Name,$Desc);
+	createTaskTemplateFields($Fields,$Req,$TEID);
+	
 }
 
 
@@ -567,13 +576,18 @@ function createTaskTemplateFields($IndexID,$Required,$TEID){
 	$Indexes=count($IndexID);
 	for($x=0;$x<$Indexes;$x++){
 		$dex=$IndexID[$x];
-		$req=$Required[$x];
-		$TE=$TEID[$x];
-		$sql="$sql ('$dex','$req','$TE')";
+		$req=0;
+		for($y=0;$y<$Indexes;$y++){
+			if($Required[$y]==$IndexID[$x]){
+				$req=$Required[$x];
+			}
+		}
+		$sql="$sql ('$dex','$req','$TEID')";
 		if($x+1!=$Indexes){
 			$sql="$sql ,";
 		}
 	}
+	echo $sql;
 	mysqli_query($conn, $sql);
 }
 function searchCustomers($Term){
@@ -1249,5 +1263,28 @@ function getPermittedIndexE($AID){
 		}
 	}
 	return $returns;
+}
+function getListOfPermissions(){
+	$conn=conDB();
+	$sql="SELECT * FROM permissions";
+	$returns=array();
+	$x=0;
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$IDKey=$row["IDKey"];
+		$Desc=$row["Description"];
+		$returns[$x]=$IDKey;
+		$x++;
+		$returns[$x]=$Desc;
+		$x++;
+	}
+	return $returns;
+}
+function getTemplateByNameDesc($Name,$Desc){
+	$conn=conDB();
+	$sql="SELECT * FROM tasktemplates WHERE Name='$Name' AND Description='$Desc'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	return $row["IDKey"];
 }
 ?>
