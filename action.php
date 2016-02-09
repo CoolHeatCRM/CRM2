@@ -23,8 +23,8 @@ else if ($mode=="NextTasks"){
 else if($mode=="CreateTemplate"){
 	$create=$_POST["create"];
 	if($create==1){
-		$Req=$_POST["Req[]"];
-		$Fields=$_POST["Use[]"];
+		$Req=$_POST["Req"];
+		$Fields=$_POST["Use"];
 		$Name=$_POST["Name"];
 		$Desc=$_POST["Desc"];
 		$Perm=$_POST["Perm"];
