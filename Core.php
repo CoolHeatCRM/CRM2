@@ -575,10 +575,11 @@ function createTaskTemplateFields($IndexID,$Required,$TEID){
 	$conn=conDB();
 	$sql="INSERT INTO fields (CusIndexID,Required,TemplateID) VALUES ";
 	$Indexes=count($IndexID);
+	$ReqN=count($Required);
 	for($x=0;$x<$Indexes;$x++){
 		$dex=$IndexID[$x];
 		$req=0;
-		for($y=0;$y<$Indexes;$y++){
+		for($y=0;$y<$ReqN;$y++){
 			if($Required[$y]==$IndexID[$x]){
 				$req=$Required[$x];
 			}
