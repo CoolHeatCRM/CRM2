@@ -581,7 +581,7 @@ function createTaskTemplateFields($IndexID,$Required,$TEID){
 		$req=0;
 		for($y=0;$y<$ReqN;$y++){
 			if($Required[$y]==$IndexID[$x]){
-				$req=$Required[$x];
+				$req=$Required[$y];
 			}
 		}
 		$sql="$sql ('$dex','$req','$TEID')";
