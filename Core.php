@@ -279,7 +279,7 @@ function printTemplateMaker($Aid,$MINI){
 		echo "<select name='Perm'>";
 		for($x=0;$x<$permsN;$x=$x+2){
 			$x2=$x+1;
-			echo "<option value='$perms[$x]'>$perms[$x2]</option>";
+			echo "<option value='$Perms[$x]'>$Perms[$x2]</option>";
 		}
 		echo"</select>";
 	echo"</div>";
