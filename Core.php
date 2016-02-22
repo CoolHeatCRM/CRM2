@@ -17,9 +17,6 @@
  * $TEID used to identify a Task Template
  * $FID used to identify a Task Template Field from the fields table.
  */
-
-
-
 //Set up functions
 function Headprint(){
 	echo "<html>
@@ -68,7 +65,7 @@ function TailPrint(){
 			<form action='action.php' method='post'>
 			<input type='text' name='Terms' class='TailSearchBar'>
 			<input type='submit' value='S' class='MediumButton'>
-			<input type='text' name='mode' value='DISPLAY' hidden></form>
+			<input type='text' name='mode' value='Search' hidden></form>
 			</div>
 			";
 	echo "</body></html>";
@@ -134,13 +131,41 @@ function printlistofCustomers($Terms,$AID){
 	$arrayN=count($array);
 	$Viewable=getPermittedIndexV($AID);
 	$Editable=getPermittedIndexE($AID);
+	$EN=count($Editable);
+	$VN=count($Viewable);
+	echo "<div class='SearchResults'>";
+	echo "<table><tr>";
+	for($v=0;$v<$VN;$v++){
+		$v++;
+		echo "<td>$Viewable[$v]</td>";
+	}
 	for($x=0;$x<$arrayN;$x++){
 		$CusID=$array[$x];
-		$sql="SELECT * FROM cusfields WHERE CusID='$array[$x]'";
-		echo "<div class='SearchResults'>";
-			
-		echo "</div>";
+		$sql="SELECT * FROM cusfields INNER JOIN cusindex ON cusfields.IndexID=cusindex.IDKey WHERE cusfields.CusID='$array[$x]'";
+		$result = mysqli_query($conn, $sql);
+		while($row = $result->fetch_assoc()){
+			$indexID=$row["IndexID"];
+			$view=0;
+			for($x=0;$x<$EN;$x++){
+				if($indexID=$Editable[$x]){
+					$view=2;
+					$x=$EN;
+				}
+			}
+			if($view==0){
+				for($x=0;$x<$VN;$x++){
+					if($indexID=$Viewable[$x]){
+						$view=1;
+						$x=$VN;
+					}
+				}
+			}
+			if($view>0){
+				
+			}
+		}
 	}
+	echo "</div>";
 }
 function printUI($AID,$mode,$TID,$MINI){
 	echo "<div class='MainWindow'>";	
@@ -155,6 +180,8 @@ function printUI($AID,$mode,$TID,$MINI){
 			printlistofCustomers($TID,$AID);
 		}else if ($mode=="CreateTemplate"){
 			printTemplateMaker($AID,$MINI);
+		}else if($mode=="CreateTasks"){
+			
 		}
 		echo "</div>";//Closes MenuButtons
 		if($MINI=="X"){
@@ -173,7 +200,6 @@ function printUI($AID,$mode,$TID,$MINI){
 		}
 		echo "</div>";
 	echo "</div>";//Closes MainWindow
-	
 }
 function printTaskUI($AID){
 	echo "<div class='MainWindow'>";
@@ -304,6 +330,13 @@ function printTemplateMaker($Aid,$MINI){
 	}
 	echo"</table>
 	</form>";
+}
+function printTaskMaker($AID){
+	echo "<form action='action.php' method='post'>";
+	echo "<select name='TEID'>";
+	
+	echo"</select>";
+	echo"</form>";
 }
 //Inventory Functions
 //Creates a new Item Template
@@ -640,6 +673,13 @@ function checkPermission($AID,$PID){
 		return TRUE;
 	}
 	return FALSE;
+}
+function checkPower($AID,$POW){
+	
+}
+function checkIndexPer(){
+	$conn=conDB();
+	$sql="";
 }
 //Takes in an Interface IDKey and returns an Array of Interface lines
 function getInterface($IID){
@@ -1214,9 +1254,10 @@ function getfieldTEID($FID){
 	return $row["TemplateID"];
 }
 //Returns an array of Cusfields that contain a given String
-function searchCFields(){
+function searchCFields($Term){
 	
 }
+//Returns the an Array of all Indexes [0]IDKey's [1]Name's
 function getFieldIndex(){
 	$conn=conDB();
 	$sql="SELECT * FROM cusindex";
@@ -1289,4 +1330,61 @@ function getTemplateByNameDesc($Name,$Desc){
 	$row= $result->fetch_assoc();
 	return $row["IDKey"];
 }
+function getListofTemplates($AID){
+	$conn=conDB();
+	$sql="SELECT * FROM tasktemplates";
+	$returns=array();
+	$x=0;
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$PID=$row["PowID"];
+		$x++;
+	}
+}
+function getPKeys(){
+	$conn=conDB();
+	$sql-"SELECT * FROM pkeys";
+	$returns=array();
+	$x=0;
+	$result = mysqli_query($conn, $sql);
+	while($row= $result->fetch_assoc()){
+		$PID=$row["PowID"];
+		$returns[$x]=$row["IDKey"];
+		$x++;
+		$returns[$x]=$row["PowID"];
+		$x++;
+		$returns[$x]=$row["PerID"];
+		$x++;
+	}
+	return $returns;
+}
+//Returns an array with the Permissions required to [0]Read and [1]Edit a specific Customer Index
+function getIndexPermissions($IndexID){
+	$conn=conDB();
+	$sql="SELECT PermIDV,PermIDE FROM cusindex WHERE IDKey='$IndexID'";
+	$result = mysqli_query($conn, $sql);
+	$row= $result->fetch_assoc();
+	$returns=array();
+	$returns[0]=$row["PermIDV"];
+	$returns[1]=$row["PermIDE"];
+	return $returns;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
